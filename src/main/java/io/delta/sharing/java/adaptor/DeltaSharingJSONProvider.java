@@ -1,4 +1,4 @@
-package io.delta.sharing.java;
+package io.delta.sharing.java.adaptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.delta.sharing.spark.DeltaSharingProfile;

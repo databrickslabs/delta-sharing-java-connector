@@ -1,4 +1,4 @@
-package io.delta.sharing.java;
+package io.delta.sharing.java.adaptor;
 
 import io.delta.sharing.spark.DeltaSharingProfile;
 import scala.Option;
