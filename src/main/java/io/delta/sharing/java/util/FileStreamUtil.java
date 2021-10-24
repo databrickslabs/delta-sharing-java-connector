@@ -8,7 +8,6 @@ import java.util.List;
 
 public class FileStreamUtil {
 
-    private static final int MAX_SKIP_BUFFER_SIZE = 2048;
     private static final int DEFAULT_BUFFER_SIZE = 8192;
     private static final int MAX_BUFFER_SIZE = Integer.MAX_VALUE - 8;
 

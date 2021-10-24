@@ -1,11 +1,9 @@
 package io.delta.sharing.java;
 
 import io.delta.sharing.java.adaptor.DeltaSharingJSONProvider;
-import io.delta.sharing.java.format.parquet.TableReader;
 import io.delta.sharing.java.mocks.Mocks;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
 import io.delta.sharing.spark.model.Table;
-import org.apache.avro.generic.GenericRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +19,7 @@ public class DeltaSharingTestCase {
     public void testGetters() throws IOException {
         DeltaSharingProfileProvider profileProvider = new DeltaSharingJSONProvider(Mocks.providerJSON);
         Path checkpointPath = Paths.get("/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
-        DeltaSharing sharing = new DeltaSharing(profileProvider, checkpointPath);
+        DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
         Assertions.assertAll(
             "assert sharing client",
             () ->
@@ -35,16 +33,14 @@ public class DeltaSharingTestCase {
     public void testListAllTables() throws IOException {
         DeltaSharingProfileProvider profileProvider = new DeltaSharingJSONProvider(Mocks.providerJSON);
         Path checkpointPath = Paths.get("/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
-        DeltaSharing sharing = new DeltaSharing(profileProvider, checkpointPath);
+        DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
         List<Table> tables = sharing.listAllTables();
         Assertions.assertTrue(tables.size() > 0);
     }
 
     @Test
     public void testTableOperations() throws IOException {
-        DeltaSharingProfileProvider profileProvider = new DeltaSharingJSONProvider(Mocks.providerJSON);
-        Path checkpointPath = Paths.get("/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
-        DeltaSharing sharing = new DeltaSharing(profileProvider, checkpointPath);
+        DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJSON, "/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
         List<Table> tables = sharing.listAllTables();
         Table firstTable = tables.get(0);
 
@@ -55,9 +51,7 @@ public class DeltaSharingTestCase {
 
     @Test
     public void testReadAll() throws IOException {
-        DeltaSharingProfileProvider profileProvider = new DeltaSharingJSONProvider(Mocks.providerJSON);
-        Path checkpointPath = Paths.get("/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
-        DeltaSharing sharing = new DeltaSharing(profileProvider, checkpointPath);
+        DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJSON, "/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
         List<Table> tables = sharing.listAllTables();
         Table firstTable = tables.get(0);
 

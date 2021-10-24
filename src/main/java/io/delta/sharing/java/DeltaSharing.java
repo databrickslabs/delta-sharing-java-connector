@@ -22,7 +22,6 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +33,7 @@ public class DeltaSharing {
     Path tempDir;
     Map<String, DeltaTableMetadata> metadataMap;
 
-    public DeltaSharing(DeltaSharingProfileProvider profileProvider, Path checkpointPath) throws IOException {
-        this.profileProvider = profileProvider;
-        this.httpClient = new DeltaSharingRestClient(profileProvider, 120, 4, false);
-        this.checkpointPath = checkpointPath;
-        this.metadataMap = new HashMap<>();
-        if (!Files.exists(checkpointPath)) {
-            Files.createDirectory(this.checkpointPath);
-        }
-        this.tempDir = Files.createTempDirectory(this.checkpointPath, "delta_sharing");
-        this.tempDir.toFile().deleteOnExit();
-    }
+    public DeltaSharing(){}
 
     public DeltaSharingProfileProvider getProfileProvider() {
         return profileProvider;
