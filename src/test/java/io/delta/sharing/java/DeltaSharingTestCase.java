@@ -18,7 +18,7 @@ public class DeltaSharingTestCase {
     @Test
     public void testGetters() throws IOException {
         DeltaSharingProfileProvider profileProvider = new DeltaSharingJSONProvider(Mocks.providerJSON);
-        Path checkpointPath = Paths.get("/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
+        Path checkpointPath = Paths.get("target/testing/");
         DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
         Assertions.assertAll(
             "assert sharing client",
@@ -32,7 +32,7 @@ public class DeltaSharingTestCase {
     @Test
     public void testListAllTables() throws IOException {
         DeltaSharingProfileProvider profileProvider = new DeltaSharingJSONProvider(Mocks.providerJSON);
-        Path checkpointPath = Paths.get("/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
+        Path checkpointPath = Paths.get("target/testing/");
         DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
         List<Table> tables = sharing.listAllTables();
         Assertions.assertTrue(tables.size() > 0);
@@ -40,7 +40,7 @@ public class DeltaSharingTestCase {
 
     @Test
     public void testTableOperations() throws IOException {
-        DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJSON, "/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
+        DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJSON, "target/testing/");
         List<Table> tables = sharing.listAllTables();
         Table firstTable = tables.get(0);
 
@@ -51,7 +51,7 @@ public class DeltaSharingTestCase {
 
     @Test
     public void testReadAll() throws IOException {
-        DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJSON, "/Users/milos.colic/IdeaProjects/DeltaSharingJavaConnector/target/testing/");
+        DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJSON, "target/testing/");
         List<Table> tables = sharing.listAllTables();
         Table firstTable = tables.get(0);
 
