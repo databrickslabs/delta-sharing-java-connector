@@ -13,7 +13,7 @@ import org.apache.parquet.io.SeekableInputStream;
  * Parquet InputFile with a local java.nio.Path.
  * Adapted from https://github.com/haifengl/smile
  *
- * @author Milos Colic
+ * This class is required to instantiate {@link org.apache.parquet.avro.AvroParquetReader} instances.
  */
 class LocalInputFile implements InputFile {
     /** Local file object. */
@@ -34,7 +34,7 @@ class LocalInputFile implements InputFile {
     }
 
     @Override
-    public SeekableInputStream newStream() throws IOException {
+    public SeekableInputStream newStream() {
         return new SeekableInputStream() {
             private final byte[] page = new byte[8192];
             private long markPos = 0;

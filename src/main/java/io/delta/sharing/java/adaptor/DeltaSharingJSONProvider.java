@@ -4,13 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.delta.sharing.spark.DeltaSharingProfile;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
 
+
 /**
- * Load [[DeltaSharingProfile]] from a JSON string.
+ * Loads {@link io.delta.sharing.spark.DeltaSharingProfileProvider} based on configuration provided as a JSON document.
+ * JSON document has to be a valid profile file document.
+ * Required fields are checked inside the constructor method and the object creation will fail in case of breaking the constraints.
+ * <p>
+ * @see         DeltaSharingProfileAdaptor  DeltaSharingProfileAdaptor used for object mapping when parsing JSON.
+ * @author      Milos Colic
+ * @since       1.0.0
  */
 public class DeltaSharingJSONProvider implements DeltaSharingProfileProvider {
     String configuration;
     DeltaSharingProfile profile;
 
+    /**
+     * Constructor method that expects Configuration JSON.
+     * JSON file must contain endpoint, bearerToken and shareCredentialsVersion fields.
+     * Object creation will fail if shareCredentialsVersion is too new.
+     * @param conf A valid JSON object.
+     */
     public DeltaSharingJSONProvider(String conf) {
         try {
             configuration = conf;

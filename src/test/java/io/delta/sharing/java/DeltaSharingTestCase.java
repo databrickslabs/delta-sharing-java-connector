@@ -46,7 +46,7 @@ public class DeltaSharingTestCase {
 
         Assertions.assertNotNull(sharing.getMetadata(firstTable));
         Assertions.assertEquals(0, sharing.getTableVersion(firstTable));
-        Assertions.assertNotNull(sharing.getFiles(firstTable, new LinkedList<String>()));
+        Assertions.assertNotNull(sharing.getFiles(firstTable, new LinkedList<>()));
     }
 
     @Test
@@ -57,5 +57,6 @@ public class DeltaSharingTestCase {
 
         Assertions.assertTrue(sharing.getAllRecords(firstTable).size() > 0);
         Assertions.assertNotNull(sharing.getAllRecords(firstTable));
+        Assertions.assertNotNull(sharing.getNRecords(firstTable, 100));
     }
 }
