@@ -1,7 +1,8 @@
 ignore:
   - "vendor/**/*"
   - "dist/**/*"
-
+codecov:
+  token: 8b1ac57c-84af-41c8-b7d2-f00fff24ef4c
 coverage:
   status:
     project: yes
