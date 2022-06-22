@@ -10,13 +10,14 @@ import scala.Option;
  * @implNote Suppress is added because of all the getters and setters are required to be explicitly created for Jackson
  * to parse JSONs correctly. However warnings are shown since getters and setters are not explicitly tests.
  * @author      Milos Colic
- * @since       1.0.0
+ * @since       0.1.0
  */
 @SuppressWarnings("unused")
 public class DeltaSharingProfileAdaptor {
     int shareCredentialsVersion;
     String endpoint;
     String bearerToken;
+    String expirationTime;
 
     /** Default constructor. */
     public DeltaSharingProfileAdaptor() { }
@@ -51,12 +52,22 @@ public class DeltaSharingProfileAdaptor {
         this.bearerToken = bearerToken;
     }
 
+    /** Getter for expirationTime. */
+    public String getExpirationTime() {
+        return expirationTime;
+    }
+
+    /** Setter for expirationTime. */
+    public void setExpirationTime(String expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
     /**
      * Java wrapper method that can generate Scala paired object.
      * This is need to be able to abstract from cross language APIs.
      * @return An equivalent instance of Scala {@link io.delta.sharing.spark.DeltaSharingProfile} class.
      */
     public DeltaSharingProfile toProfile() {
-        return DeltaSharingProfile.apply(Option.apply(shareCredentialsVersion), endpoint, bearerToken);
+        return DeltaSharingProfile.apply(Option.apply(shareCredentialsVersion), endpoint, bearerToken, expirationTime);
     }
 }

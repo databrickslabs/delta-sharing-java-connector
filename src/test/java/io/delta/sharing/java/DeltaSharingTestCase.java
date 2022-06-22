@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
@@ -21,11 +22,11 @@ public class DeltaSharingTestCase {
         Path checkpointPath = Paths.get("target/testing/");
         DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
         Assertions.assertAll(
-            "assert sharing client",
-            () ->
-                Assertions.assertNotNull(sharing.getHttpClient()),
-            () ->
-                Assertions.assertNotNull(sharing.getProfileProvider())
+                "assert sharing client",
+                () ->
+                        Assertions.assertNotNull(sharing.getHttpClient()),
+                () ->
+                        Assertions.assertNotNull(sharing.getProfileProvider())
         );
     }
 
@@ -50,7 +51,7 @@ public class DeltaSharingTestCase {
     }
 
     @Test
-    public void testReadAll() throws IOException {
+    public void testReadAll() throws IOException, URISyntaxException {
         DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJSON, "target/testing/");
         List<Table> tables = sharing.listAllTables();
         Table firstTable = tables.get(0);
