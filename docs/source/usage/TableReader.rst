@@ -14,7 +14,7 @@ Examples
 .. tabs::
    .. code-tab:: java
 
-    import io.delta.sharing.java.format.parquet.TableReader;
+    import com.databricks.labs.delta.sharing.java.format.parquet.TableReader;
     import org.apache.avro.generic.GenericRecord;
 
     TableReader<GenericRecord> tableReader = sharing.getTableReader(“table.coordinates”);

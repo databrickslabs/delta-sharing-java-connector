@@ -1,8 +1,7 @@
-package io.delta.sharing.java;
+package com.databricks.labs.delta.sharing.java;
 
-
-import io.delta.sharing.java.adaptor.DeltaSharingJsonProvider;
-import io.delta.sharing.java.mocks.Mocks;
+import com.databricks.labs.delta.sharing.java.adaptor.DeltaSharingJsonProvider;
+import com.databricks.labs.delta.sharing.java.mocks.Mocks;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
 import io.delta.sharing.spark.model.Table;
 import java.io.IOException;

@@ -12,8 +12,8 @@ Examples
 .. tabs::
    .. code-tab:: java
 
-    import io.delta.sharing.java.DeltaSharingFactory;
-    import io.delta.sharing.java.DeltaSharing;
+    import com.databricks.labs.delta.sharing.java.DeltaSharingFactory;
+    import com.databricks.labs.delta.sharing.java.DeltaSharing;
 
     DeltaSharing sharing = DeltaSharingFactory
       .create(
@@ -24,7 +24,7 @@ Examples
 
    .. code-tab:: scala
 
-    import io.delta.sharing.java.DeltaSharingFactory
+    import com.databricks.labs.delta.sharing.java.DeltaSharingFactory
 
     val sharing = DeltaSharingFactory
       .create(

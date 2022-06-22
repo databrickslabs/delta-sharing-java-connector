@@ -1,6 +1,6 @@
-package io.delta.sharing.java;
+package com.databricks.labs.delta.sharing.java;
 
-import io.delta.sharing.java.format.parquet.TableReader;
+import com.databricks.labs.delta.sharing.java.format.parquet.TableReader;
 import io.delta.sharing.spark.DeltaSharingFileSystem;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
 import io.delta.sharing.spark.DeltaSharingRestClient;

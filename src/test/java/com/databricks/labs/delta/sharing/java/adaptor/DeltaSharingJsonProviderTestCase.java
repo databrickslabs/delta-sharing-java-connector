@@ -1,8 +1,8 @@
-package io.delta.sharing.java.adaptor;
+package com.databricks.labs.delta.sharing.java.adaptor;
 
+import com.databricks.labs.delta.sharing.java.mocks.Mocks;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.delta.sharing.java.mocks.Mocks;
 import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 /** 
  * Test cases for Delta Sharing Json Provider.
- *
- * @throws JsonProcessingException for all problems encountered when processing Json
  */
 
 public class DeltaSharingJsonProviderTestCase {

@@ -1,4 +1,4 @@
-package io.delta.sharing.java.adaptor;
+package com.databricks.labs.delta.sharing.java.adaptor;
 
 import io.delta.sharing.spark.DeltaSharingProfile;
 import scala.Option;
@@ -66,7 +66,7 @@ public class DeltaSharingProfileAdaptor {
    * Java wrapper method that can generate Scala paired object. This is need to be able to abstract
    * from cross language APIs.
    *
-   * @return An equivalent instance of Scala {@link io.delta.sharing.spark.DeltaSharingProfile}
+   * @return An equivalent instance of Scala {@link DeltaSharingProfile}
    *         class.
    */
   public DeltaSharingProfile toProfile() {

@@ -1,4 +1,4 @@
-package io.delta.sharing.java.format.parquet;
+package com.databricks.labs.delta.sharing.java.format.parquet;
 
 import java.io.IOException;
 import java.nio.file.Path;
