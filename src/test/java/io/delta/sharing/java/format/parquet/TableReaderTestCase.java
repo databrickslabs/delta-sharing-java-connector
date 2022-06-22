@@ -13,45 +13,45 @@ import java.util.List;
 
 public class TableReaderTestCase {
 
-    @Test
-    public void testRead() throws IOException {
-        List<Path> paths = new LinkedList<>();
-        paths.add(
-            Paths.get("src", "test", "resources", "table_reader_test_data.parquet").toAbsolutePath()
-        );
+  @Test
+  public void testRead() throws IOException {
+    List<Path> paths = new LinkedList<>();
+    paths.add(
+      Paths.get("src", "test", "resources", "table_reader_test_data.parquet").toAbsolutePath()
+    );
 
-        TableReader<GenericRecord> tableReader = new TableReader<>(paths);
+    TableReader<GenericRecord> tableReader = new TableReader<>(paths);
 
-        GenericRecord record = tableReader.read();
-        Schema schema = record.getSchema();
-        Schema.Field field = schema.getFields().get(0);
-        Assertions.assertAll(
-            "assert table reader",
-            () ->
-                Assertions.assertEquals(record.get("date").toString(), "2020-10-10"),
-            () ->
-                Assertions.assertEquals(record.get(field.name()).toString(), "2020-10-10")
-        );
-    }
+    GenericRecord record = tableReader.read();
+    Schema schema = record.getSchema();
+    Schema.Field field = schema.getFields().get(0);
+    Assertions.assertAll(
+      "assert table reader",
+      () ->
+        Assertions.assertEquals(record.get("date").toString(), "2020-10-10"),
+      () ->
+        Assertions.assertEquals(record.get(field.name()).toString(), "2020-10-10")
+    );
+  }
 
-    @Test
-    public void testReadN() throws IOException {
-        List<Path> paths = new LinkedList<>();
-        paths.add(
-                Paths.get("src", "test", "resources", "table_reader_test_data.parquet").toAbsolutePath()
-        );
+  @Test
+  public void testReadN() throws IOException {
+    List<Path> paths = new LinkedList<>();
+    paths.add(
+        Paths.get("src", "test", "resources", "table_reader_test_data.parquet").toAbsolutePath()
+    );
 
-        TableReader<GenericRecord> tableReader = new TableReader<>(paths);
+    TableReader<GenericRecord> tableReader = new TableReader<>(paths);
 
-        List<GenericRecord> records = tableReader.readN(2);
-        Schema schema = records.get(0).getSchema();
-        Schema.Field field = schema.getFields().get(0);
-        Assertions.assertAll(
-                "assert table reader",
-                () ->
-                        Assertions.assertEquals(records.get(0).get("date").toString(), "2020-10-10"),
-                () ->
-                        Assertions.assertEquals(records.get(0).get(field.name()).toString(), "2020-10-10")
-        );
-    }
+    List<GenericRecord> records = tableReader.readN(2);
+    Schema schema = records.get(0).getSchema();
+    Schema.Field field = schema.getFields().get(0);
+    Assertions.assertAll(
+        "assert table reader",
+        () ->
+            Assertions.assertEquals(records.get(0).get("date").toString(), "2020-10-10"),
+        () ->
+            Assertions.assertEquals(records.get(0).get(field.name()).toString(), "2020-10-10")
+    );
+  }
 }

@@ -204,3 +204,6 @@ Temporary Items
 
 # Ignore docs/_build
 docs/_build
+
+# VScode
+.vscode
