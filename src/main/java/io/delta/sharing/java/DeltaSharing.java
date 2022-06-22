@@ -26,6 +26,8 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A wrapper class for {@link io.delta.sharing.spark.DeltaSharingRestClient} instance.
@@ -35,8 +37,9 @@ import java.util.Map;
  * If the metadata has changed we will retrieve the new state of the file.
  * If the metadata has remained the same we will use the available local copy in the temp directory.
  * <p>
- * @author      Milos Colic
- * @since       1.0.0
+ *
+ * @author Milos Colic
+ * @since 0.1.0
  */
 public class DeltaSharing {
     DeltaSharingProfileProvider profileProvider;
@@ -48,16 +51,22 @@ public class DeltaSharing {
     /**
      * Default constructor
      * Construction of instances is delegated to a factory.
+     *
      * @see DeltaSharingFactory
      */
-    public DeltaSharing(){}
+    public DeltaSharing() {
+    }
 
-    /** Getter for {@link DeltaSharing#profileProvider}. */
+    /**
+     * Getter for {@link DeltaSharing#profileProvider}.
+     */
     public DeltaSharingProfileProvider getProfileProvider() {
         return profileProvider;
     }
 
-    /** Getter for {@link DeltaSharing#httpClient}. */
+    /**
+     * Getter for {@link DeltaSharing#httpClient}.
+     */
     public DeltaSharingRestClient getHttpClient() {
         return httpClient;
     }
@@ -65,8 +74,9 @@ public class DeltaSharing {
     /**
      * Adapter method for getting a List of all tables.
      * Scala API returns a {@link Seq} and we require a {@link List}.
-     * @implNote Suppress unnecessary local variable is done to remove warnings for a decoupled Scala to Java conversion call and a return call.
+     *
      * @return A list of all tables.
+     * @implNote Suppress unnecessary local variable is done to remove warnings for a decoupled Scala to Java conversion call and a return call.
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
     public List<Table> listAllTables() {
@@ -75,12 +85,16 @@ public class DeltaSharing {
         return tableList;
     }
 
-    /** Getter for {@link io.delta.sharing.spark.DeltaSharingRestClient#getMetadata(Table)}. */
+    /**
+     * Getter for {@link io.delta.sharing.spark.DeltaSharingRestClient#getMetadata(Table)}.
+     */
     public DeltaTableMetadata getMetadata(Table table) {
         return httpClient.getMetadata(table);
     }
 
-    /** Getter for {@link io.delta.sharing.spark.DeltaSharingRestClient#getTableVersion(Table)} (Table)}. */
+    /**
+     * Getter for {@link io.delta.sharing.spark.DeltaSharingRestClient#getTableVersion(Table)} (Table)}.
+     */
     public long getTableVersion(Table table) {
         return httpClient.getTableVersion(table);
     }
@@ -88,8 +102,9 @@ public class DeltaSharing {
     /**
      * Adapter method for getting a List of files belonging to a {@link Table}.
      * Scala API returns a {@link Seq} and we require a {@link List}.
-     * @implNote Suppress unnecessary local variable is done to remove warnings for a decoupled Scala to Java conversion call and a return call.
+     *
      * @return A list of files corresponding to a table.
+     * @implNote Suppress unnecessary local variable is done to remove warnings for a decoupled Scala to Java conversion call and a return call.
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
     public List<AddFile> getFiles(Table table,
@@ -109,37 +124,57 @@ public class DeltaSharing {
     /**
      * Adapter method for getting a List of files belonging to a {@link Table}.
      * Scala API returns a {@link Seq} and we require a {@link List}.
-     * @implNote Suppress unnecessary local variable is done to remove warnings for a decoupled Scala to Java conversion call and a return call.
+     *
      * @return A list of files corresponding to a table.
+     * @implNote Suppress unnecessary local variable is done to remove warnings for a decoupled Scala to Java conversion call and a return call.
      */
     public List<AddFile> getFiles(Table table,
-                                    List<String> predicates) {
+                                  List<String> predicates) {
         return getFiles(table, predicates, null);
     }
 
     /**
      * Adapter method for getting table coordinates.
+     *
      * @return A string representing coordinates of the table.
      */
     public String getCoordinates(Table table) {
-        return table.share() + "." + table.schema() + "." + table.name();
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9\\-_]*\\.[a-zA-Z0-9\\-_]*\\.[a-zA-Z0-9\\-_]*", Pattern.CASE_INSENSITIVE);
+        String coords = table.share() + "." + table.schema() + "." + table.name();
+        Matcher matcher = pattern.matcher(coords);
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            return coords;
+        } else {
+            throw new IllegalArgumentException("Invalid format for coordinates");
+        }
     }
 
     /**
      * Getter for a temp file that will be stored in {@link DeltaSharing#checkpointPath}.
+     *
      * @param file File for which we are generating the checkpoint path for.
      * @return A fully qualified path for a checkpoint file copy.
      */
     private Path getFileCheckpointPath(AddFile file) {
-        String path = String.format("%s/%s.parquet", this.tempDir, file.id());
-        return Paths.get(path);
+        String fileId = file.id();
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(fileId);
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            String path = String.format("%s/%s.parquet", this.tempDir, file.id());
+            return Paths.get(path);
+        } else {
+            throw new IllegalArgumentException("Invalid format for file id. The id contains special characters.");
+        }
     }
 
     /**
      * Fetches the remote files as input streams and writes the content into a {@link DeltaSharing#checkpointPath}.
+     *
      * @param files Files for which we are generating the checkpoint file copies.
      * @param fs    {@link DeltaSharingFileSystem} instance used to create input streams from which we are getting
-     *                                            the byte arrays needed for writing the checkpoint file copies.
+     *              the byte arrays needed for writing the checkpoint file copies.
      * @return A fully qualified path for a checkpoint file copy.
      * @throws IOException Transitive exception due to the call to {@link Files#write(Path, byte[], OpenOption...)}.
      */
@@ -157,6 +192,7 @@ public class DeltaSharing {
 
     /**
      * Getter for a temp files that will be stored in {@link DeltaSharing#checkpointPath}.
+     *
      * @param files Files for which we are generating the checkpoint paths for.
      * @return A List of fully qualified paths for a checkpoint file copies.
      */
@@ -173,8 +209,9 @@ public class DeltaSharing {
      * Resolves and constructs the {@link TableReader} instance associated with the table.
      * It inspects the available {@link DeltaSharing#metadataMap} and based on the metadata it re-fetches the stale
      * into the {@link DeltaSharing#checkpointPath} directory.
+     *
      * @param table Table whose reader is requested.
-     * @return  An instance of {@link TableReader} that will manage the reads from the table.
+     * @return An instance of {@link TableReader} that will manage the reads from the table.
      * @throws IOException Transitive due to the call to {@link TableReader#TableReader(List)}.
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
@@ -204,6 +241,7 @@ public class DeltaSharing {
 
     /**
      * A reader method that reads all the records from all the files that belong to a table.
+     *
      * @param table An instance of {@link Table} whose records we are reading.
      * @return A list of records from the table instance.
      * @throws IOException Transitive due to the call to {@link TableReader#read()}
@@ -212,7 +250,7 @@ public class DeltaSharing {
         TableReader<GenericRecord> tableReader = getTableReader(table);
         List<GenericRecord> records = new LinkedList<>();
         GenericRecord currentRecord = tableReader.read();
-        while(currentRecord != null) {
+        while (currentRecord != null) {
             records.add(currentRecord);
             currentRecord = tableReader.read();
         }
@@ -224,8 +262,9 @@ public class DeltaSharing {
      * This call will always create a new instance of the reader and will always return the same N records.
      * For full reads use {@link DeltaSharing#getTableReader(Table)} to access the reader and
      * then use {@link TableReader#readN(Integer)} to read blocks of records.
+     *
      * @param table An instance of {@link Table} whose records we are reading.
-     * @param N Number of records to be read at most.
+     * @param N     Number of records to be read at most.
      * @return A list of records from the table instance. If less records are available, only the available records will be returned.
      * @throws IOException Transitive due to the call to {@link TableReader#read()}
      */
