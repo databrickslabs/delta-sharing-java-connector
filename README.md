@@ -1,7 +1,10 @@
 # Delta Sharing Java Connector
-[![status: experimental](https://github.com/GIScience/badges/raw/master/status/experimental.svg)](https://github.com/GIScience/badges#experimental)
+<img src="docs/source/images/delta-sharing-java-logo.png" alt="drawing" style="width:50px;"/>
+<img src="https://github.com/GIScience/badges/raw/master/status/experimental.svg" alt="drawing" style="width:140px; margin-bottom:15px;"/>
 
 A java connector for [delta-sharing](https://delta.io/sharing/) that allows you to easily ingest data on any JVM.
+
+![Design](docs/source/images/high-level-design.png)
 
 
 ## Project Description
