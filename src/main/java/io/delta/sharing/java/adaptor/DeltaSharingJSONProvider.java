@@ -12,7 +12,7 @@ import io.delta.sharing.spark.DeltaSharingProfileProvider;
  * <p>
  * @see         DeltaSharingProfileAdaptor  DeltaSharingProfileAdaptor used for object mapping when parsing JSON.
  * @author      Milos Colic
- * @since       1.0.0
+ * @since       0.1.0
  */
 public class DeltaSharingJSONProvider implements DeltaSharingProfileProvider {
     String configuration;
@@ -33,6 +33,7 @@ public class DeltaSharingJSONProvider implements DeltaSharingProfileProvider {
         } catch (Exception e) {
             System.out.print(e);
         }
+        assert profile != null;
         if (profile.shareCredentialsVersion().isEmpty()) {
             throw new IllegalArgumentException(
                     "Cannot find the 'shareCredentialsVersion' field in the profile file");
