@@ -1,0 +1,38 @@
+name: build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run check style
+        uses: nikitasavinov/checkstyle-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: 'github-pr-check'    
+      - name: Configure JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'zulu'
+      - name: Test and build the scala JAR
+        run: mvn -q clean install
+      - name: Publish test coverage
+        uses: codecov/codecov-action@v1
+      - name: Copy artifacts to GH Actions run
+        run: |
+          mkdir staging
+          cp target/*.jar staging
+      - uses: actions/upload-artifact@v3
+        with:
+          name: artefacts
+          path: staging/*
