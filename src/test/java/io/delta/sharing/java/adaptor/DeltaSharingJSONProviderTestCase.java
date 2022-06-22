@@ -8,6 +8,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
+/** 
+ * Test cases for Delta Sharing Json Provider.
+ *
+ * @throws JsonProcessingException for all problems encountered when processing Json
+ */
+
 public class DeltaSharingJsonProviderTestCase {
 
   @SuppressWarnings("ResultOfMethodCallIgnored")

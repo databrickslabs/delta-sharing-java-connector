@@ -1,19 +1,23 @@
 package io.delta.sharing.java;
 
+
 import io.delta.sharing.java.adaptor.DeltaSharingJsonProvider;
 import io.delta.sharing.java.mocks.Mocks;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
 import io.delta.sharing.spark.model.Table;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
+/**
+ * Test cases for Delta Sharing connector.
+ *
+ */
 public class DeltaSharingTestCase {
 
   @Test
@@ -21,13 +25,9 @@ public class DeltaSharingTestCase {
     DeltaSharingProfileProvider profileProvider = new DeltaSharingJsonProvider(Mocks.providerJson);
     Path checkpointPath = Paths.get("target/testing/");
     DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
-    Assertions.assertAll(
-        "assert sharing client",
-        () ->
-            Assertions.assertNotNull(sharing.getHttpClient()),
-        () ->
-            Assertions.assertNotNull(sharing.getProfileProvider())
-    );
+    Assertions.assertAll("assert sharing client",
+        () -> Assertions.assertNotNull(sharing.getHttpClient()),
+        () -> Assertions.assertNotNull(sharing.getProfileProvider()));
   }
 
   @Test
