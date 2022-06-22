@@ -1,17 +1,16 @@
-package io.delta.sharing.java.format.parquet;
+package com.databricks.labs.delta.sharing.java.parquet;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import com.databricks.labs.delta.sharing.java.format.parquet.LocalInputFile;
 import org.apache.parquet.io.SeekableInputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for local Input File.
- *
- * @throws IOException for all IO problems
  */
 public class LocalInputFileTestCase {
 
@@ -59,7 +58,7 @@ public class LocalInputFileTestCase {
     ByteBuffer byteBuffer = ByteBuffer.allocateDirect(8192 * 4);
     SeekableInputStream stream = localInputFile.newStream();
 
-    Assertions.assertDoesNotThrow(() -> stream.reset(), "assert no exception for reset");
+    Assertions.assertDoesNotThrow(stream::reset, "assert no exception for reset");
 
     Assertions.assertDoesNotThrow(() -> stream.read(byteBuffer),
         "assert no exception for read with byte buffer");

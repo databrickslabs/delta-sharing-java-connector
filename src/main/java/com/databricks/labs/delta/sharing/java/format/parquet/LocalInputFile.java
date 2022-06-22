@@ -1,4 +1,4 @@
-package io.delta.sharing.java.format.parquet;
+package com.databricks.labs.delta.sharing.java.format.parquet;
 
 import java.io.EOFException;
 import java.io.FileNotFoundException;
@@ -13,7 +13,7 @@ import org.apache.parquet.io.SeekableInputStream;
  * Parquet InputFile with a local java.nio.Path. Adapted from https://github.com/haifengl/smile This
  * class is required to instantiate {@link org.apache.parquet.avro.AvroParquetReader} instances.
  */
-class LocalInputFile implements InputFile {
+public class LocalInputFile implements InputFile {
   /** Local file object. */
   private final RandomAccessFile input;
 

@@ -1,4 +1,4 @@
-package io.delta.sharing.java.mocks;
+package com.databricks.labs.delta.sharing.java.mocks;
 
 /** 
  * Mock for provider json.
