@@ -28,6 +28,8 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A wrapper class for {@link io.delta.sharing.spark.DeltaSharingRestClient} instance.
@@ -139,7 +141,15 @@ public class DeltaSharing {
      * @return A string representing coordinates of the table.
      */
     public String getCoordinates(Table table) {
-        return table.share() + "." + table.schema() + "." + table.name();
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9\\-_]*\\.[a-zA-Z0-9\\-_]*\\.[a-zA-Z0-9\\-_]*", Pattern.CASE_INSENSITIVE);
+        String coords = table.share() + "." + table.schema() + "." + table.name();
+        Matcher matcher = pattern.matcher(coords);
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            return coords;
+        } else {
+            throw new IllegalArgumentException("Invalid format for coordinates");
+        }
     }
 
     /**
@@ -149,8 +159,16 @@ public class DeltaSharing {
      * @return A fully qualified path for a checkpoint file copy.
      */
     private Path getFileCheckpointPath(AddFile file) {
-        String path = String.format("%s/%s.parquet", this.tempDir, file.id());
-        return Paths.get(path);
+        String fileId = file.id();
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(fileId);
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            String path = String.format("%s/%s.parquet", this.tempDir, file.id());
+            return Paths.get(path);
+        } else {
+            throw new IllegalArgumentException("Invalid format for file id. The id contains special characters.");
+        }
     }
 
     /**
