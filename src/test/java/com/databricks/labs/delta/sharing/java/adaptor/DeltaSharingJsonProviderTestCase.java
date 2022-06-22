@@ -1,8 +1,8 @@
 package com.databricks.labs.delta.sharing.java.adaptor;
 
+import com.databricks.labs.delta.sharing.java.mocks.Mocks;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.databricks.labs.delta.sharing.java.mocks.Mocks;
 import java.util.Objects;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

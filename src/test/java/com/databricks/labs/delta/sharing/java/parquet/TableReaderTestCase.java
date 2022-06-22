@@ -1,11 +1,11 @@
 package com.databricks.labs.delta.sharing.java.parquet;
 
+import com.databricks.labs.delta.sharing.java.format.parquet.TableReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
-import com.databricks.labs.delta.sharing.java.format.parquet.TableReader;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.junit.jupiter.api.Assertions;

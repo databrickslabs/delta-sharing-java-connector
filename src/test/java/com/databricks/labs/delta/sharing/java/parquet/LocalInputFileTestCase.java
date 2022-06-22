@@ -1,10 +1,10 @@
 package com.databricks.labs.delta.sharing.java.parquet;
 
+import com.databricks.labs.delta.sharing.java.format.parquet.LocalInputFile;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import com.databricks.labs.delta.sharing.java.format.parquet.LocalInputFile;
 import org.apache.parquet.io.SeekableInputStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
