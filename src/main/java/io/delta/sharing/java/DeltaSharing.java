@@ -217,8 +217,9 @@ public class DeltaSharing {
     @SuppressWarnings("UnnecessaryLocalVariable")
     public TableReader<GenericRecord> getTableReader(Table table) throws IOException, URISyntaxException {
         List<AddFile> files = getFiles(table, new LinkedList<>());
-        DeltaSharingFileSystem fs = new DeltaSharingFileSystem();
-        fs.setConf(new Configuration());
+        try (DeltaSharingFileSystem fs = new DeltaSharingFileSystem()) {
+            fs.setConf(new Configuration());
+        }
         String uniqueRef = getCoordinates(table);
         List<Path> paths;
         DeltaTableMetadata newMetadata = this.getMetadata(table);
