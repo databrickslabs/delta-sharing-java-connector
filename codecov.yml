@@ -1,0 +1,17 @@
+ignore:
+  - "vendor/**/*"
+  - "dist/**/*"
+codecov:
+  token: 8b1ac57c-84af-41c8-b7d2-f00fff24ef4c
+coverage:
+  status:
+    project: yes
+    patch: true
+    changes: true
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false   # if true: only post the comment if coverage changes
+  require_base: true       # [true :: must have a base report to post]
+  require_head: true       # [true :: must have a head report to post]
+  branches: []             # branch names that can post comment

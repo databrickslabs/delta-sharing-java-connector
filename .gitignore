@@ -201,3 +201,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Ignore docs/_build
+docs/_build
