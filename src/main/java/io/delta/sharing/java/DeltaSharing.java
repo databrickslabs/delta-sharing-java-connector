@@ -4,6 +4,7 @@ import io.delta.sharing.java.format.parquet.TableReader;
 import io.delta.sharing.spark.DeltaSharingFileSystem;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
 import io.delta.sharing.spark.DeltaSharingRestClient;
+import io.delta.sharing.spark.InMemoryHttpInputStream;
 import io.delta.sharing.spark.model.AddFile;
 import io.delta.sharing.spark.model.DeltaTableFiles;
 import io.delta.sharing.spark.model.DeltaTableMetadata;
@@ -19,6 +20,7 @@ import scala.collection.Seq;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -173,15 +175,13 @@ public class DeltaSharing {
      * Fetches the remote files as input streams and writes the content into a {@link DeltaSharing#checkpointPath}.
      *
      * @param files Files for which we are generating the checkpoint file copies.
-     * @param fs    {@link DeltaSharingFileSystem} instance used to create input streams from which we are getting
-     *              the byte arrays needed for writing the checkpoint file copies.
      * @return A fully qualified path for a checkpoint file copy.
      * @throws IOException Transitive exception due to the call to {@link Files#write(Path, byte[], OpenOption...)}.
      */
-    private List<Path> writeCheckpointFiles(List<AddFile> files, DeltaSharingFileSystem fs) throws IOException {
+    private List<Path> writeCheckpointFiles(List<AddFile> files) throws IOException, URISyntaxException {
         List<Path> paths = new LinkedList<>();
         for (AddFile file : files) {
-            FSDataInputStream stream = fs.open(DeltaSharingFileSystem.createPath(URI.create(file.url()), file.size()), 1024);
+            FSDataInputStream stream = new FSDataInputStream(new InMemoryHttpInputStream(new URI(file.url())));
             Path path = getFileCheckpointPath(file);
             paths.add(path);
             Files.write(path, IOUtils.toByteArray(stream));
@@ -215,7 +215,7 @@ public class DeltaSharing {
      * @throws IOException Transitive due to the call to {@link TableReader#TableReader(List)}.
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    public TableReader<GenericRecord> getTableReader(Table table) throws IOException {
+    public TableReader<GenericRecord> getTableReader(Table table) throws IOException, URISyntaxException {
         List<AddFile> files = getFiles(table, new LinkedList<>());
         DeltaSharingFileSystem fs = new DeltaSharingFileSystem();
         fs.setConf(new Configuration());
@@ -225,13 +225,13 @@ public class DeltaSharing {
         if (this.metadataMap.containsKey(uniqueRef)) {
             DeltaTableMetadata metadata = this.metadataMap.get(uniqueRef);
             if (!newMetadata.equals(metadata)) {
-                paths = writeCheckpointFiles(files, fs);
+                paths = writeCheckpointFiles(files);
                 this.metadataMap.put(uniqueRef, newMetadata);
             } else {
                 paths = getCheckpointPaths(files);
             }
         } else {
-            paths = writeCheckpointFiles(files, fs);
+            paths = writeCheckpointFiles(files);
             this.metadataMap.put(uniqueRef, newMetadata);
         }
 
@@ -246,7 +246,7 @@ public class DeltaSharing {
      * @return A list of records from the table instance.
      * @throws IOException Transitive due to the call to {@link TableReader#read()}
      */
-    public List<GenericRecord> getAllRecords(Table table) throws IOException {
+    public List<GenericRecord> getAllRecords(Table table) throws IOException, URISyntaxException {
         TableReader<GenericRecord> tableReader = getTableReader(table);
         List<GenericRecord> records = new LinkedList<>();
         GenericRecord currentRecord = tableReader.read();
@@ -268,7 +268,7 @@ public class DeltaSharing {
      * @return A list of records from the table instance. If less records are available, only the available records will be returned.
      * @throws IOException Transitive due to the call to {@link TableReader#read()}
      */
-    public List<GenericRecord> getNRecords(Table table, int N) throws IOException {
+    public List<GenericRecord> getNRecords(Table table, int N) throws IOException, URISyntaxException {
         TableReader<GenericRecord> tableReader = getTableReader(table);
         return tableReader.readN(N);
     }
