@@ -21,26 +21,42 @@ public class DeltaSharingTestCase {
 
   @Test
   public void testGetters() throws IOException {
-    DeltaSharingProfileProvider profileProvider = new DeltaSharingJsonProvider(Mocks.providerJson);
+    DeltaSharingProfileProvider profileProvider =
+        new DeltaSharingJsonProvider(Mocks.providerJson);
     Path checkpointPath = Paths.get("target/testing/");
-    DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
+    DeltaSharing sharing = new DeltaSharing(profileProvider, checkpointPath);
     Assertions.assertAll("assert sharing client",
         () -> Assertions.assertNotNull(sharing.getHttpClient()),
-        () -> Assertions.assertNotNull(sharing.getProfileProvider()));
+        () -> Assertions.assertNotNull(sharing.getProfileProvider()),
+        () -> Assertions.assertNotNull(sharing.getCheckpointPath()));
+  }
+
+  @Test
+  public void testGetterStringConstructor() throws IOException {
+    DeltaSharing sharing =
+        new DeltaSharing(Mocks.providerJson, "target/testing/");
+    Assertions.assertAll("assert sharing client",
+        () -> Assertions.assertNotNull(sharing.getHttpClient()),
+        () -> Assertions.assertNotNull(sharing.getProfileProvider()),
+        () -> Assertions.assertNotNull(sharing.getCheckpointPath()));
   }
 
   @Test
   public void testListAllTables() throws IOException {
-    DeltaSharingProfileProvider profileProvider = new DeltaSharingJsonProvider(Mocks.providerJson);
+    DeltaSharingProfileProvider profileProvider =
+        new DeltaSharingJsonProvider(Mocks.providerJson);
     Path checkpointPath = Paths.get("target/testing/");
-    DeltaSharing sharing = DeltaSharingFactory.create(profileProvider, checkpointPath);
+    DeltaSharing sharing = new DeltaSharing(profileProvider, checkpointPath);
     List<Table> tables = sharing.listAllTables();
     Assertions.assertTrue(tables.size() > 0);
   }
 
   @Test
   public void testTableOperations() throws IOException {
-    DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJson, "target/testing/");
+    DeltaSharingProfileProvider profileProvider =
+        new DeltaSharingJsonProvider(Mocks.providerJson);
+    Path checkpointPath = Paths.get("target/testing/");
+    DeltaSharing sharing = new DeltaSharing(profileProvider, checkpointPath);
     List<Table> tables = sharing.listAllTables();
     Table firstTable = tables.get(0);
 
@@ -51,7 +67,8 @@ public class DeltaSharingTestCase {
 
   @Test
   public void testReadAll() throws IOException, URISyntaxException {
-    DeltaSharing sharing = DeltaSharingFactory.create(Mocks.providerJson, "target/testing/");
+    DeltaSharing sharing =
+        new DeltaSharing(Mocks.providerJson, "target/testing/");
     List<Table> tables = sharing.listAllTables();
     Table firstTable = tables.get(0);
 
