@@ -14,8 +14,7 @@ import org.apache.parquet.hadoop.ParquetReader;
  * constitute a table.
  * <p/>
  *
- * @author Milos Colic
- * @since 1.0.0
+ * @since 0.1.0
  */
 public class TableReader<T> {
   private Queue<ParquetReader<T>> readers;
