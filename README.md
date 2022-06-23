@@ -1,16 +1,17 @@
 # Delta Sharing Java Connector
 <img src="docs/source/images/delta-sharing-java-logo.png" alt="drawing" style="width:50px; float: left;"/>
-<img src="https://github.com/GIScience/badges/raw/master/status/experimental.svg" alt="drawing" style="width:140px; margin-top:15px; float: left;"/>
-<br>
-<br>
 
-A java connector for [delta-sharing](https://delta.io/sharing/) that allows you to easily ingest data on any JVM.
+![experimental](https://github.com/GIScience/badges/raw/master/status/experimental.svg)
+[![build](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/build.yml/badge.svg)](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/build.yml)
+[![docs](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/docs.yml/badge.svg)](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/docs.yml)
+
+A Java connector for [Delta Sharing](https://delta.io/sharing/) that allows you to easily ingest data on any JVM.
 
 ![Design](docs/source/images/high-level-design.png)
 
-
 ## Project Description
-This project brings delta-sharing capabilities to java.
+This project brings Delta Sharing capabilities to Java.
+
 The Java connector follows the Delta Sharing protocol to read shared tables from a Delta Sharing Server. To further reduce and limit egress costs on the Data Provider side, we implemented a persistent cache to reduce and limit the egress costs on the Data Provider side by removing any unnecessary reads.
 
 - The data is served to the connector via persisted cache to limit the egress costs whenever possible.
@@ -19,7 +20,7 @@ The Java connector follows the Delta Sharing protocol to read shared tables from
   - Data records are provided as a set of Avro GenericRecords that provide a good balance between the flexibility of representation and integrational capabilities. GenericRecords can easily be exported to JSON and/or other formats using EncoderFactory in Avro.
 
 - Every time the data access is requested the connector will check for the metadata updates and refresh the table data in case of any metadata changes.
-   - The connector requests the metadata for the table based on its coordinate from the provider. The table coordinate is the profile file path following with `#` and the fully qualified name of a table (<share-name>.<schema-name>.<table-name>)
+   - The connector requests the metadata for the table based on its coordinate from the provider. The table coordinate is the profile file path following with `#` and the fully qualified name of a table (`<share-name>.<schema-name>.<table-name>`)
    - A lookup of table to metadata is maintained inside the JVM. The connector then compares the received metadata with the last metadata snapshot. If there is no change, then the existing table data is served from cache. Otherwise, the connector will refresh the table data in the cache.
   
 - When the metadata changes are detected both the data and the metadata will be updated.
