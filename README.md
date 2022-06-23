@@ -2,9 +2,7 @@
 <img src="docs/source/images/delta-sharing-java-logo.png" alt="drawing" style="width:50px; float: left;"/>
 
 ![experimental](https://github.com/GIScience/badges/raw/master/status/experimental.svg)
-
 [![build](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/build.yml/badge.svg)](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/build.yml)
-
 [![docs](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/docs.yml/badge.svg)](https://github.com/databrickslabs/delta-sharing-java-connector/actions/workflows/docs.yml)
 
 A Java connector for [Delta Sharing](https://delta.io/sharing/) that allows you to easily ingest data on any JVM.
