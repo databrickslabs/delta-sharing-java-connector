@@ -18,8 +18,7 @@ import io.delta.sharing.spark.DeltaSharingProfileProvider;
  * @since 0.1.0
  */
 public class DeltaSharingJsonProvider implements DeltaSharingProfileProvider {
-  private String configuration;
-  private DeltaSharingProfile profile;
+  private final DeltaSharingProfile profile;
 
   /**
    * Constructor method that expects Configuration JSON. JSON file must contain
@@ -30,10 +29,9 @@ public class DeltaSharingJsonProvider implements DeltaSharingProfileProvider {
    */
   public DeltaSharingJsonProvider(String conf) throws JsonProcessingException {
     try {
-      configuration = conf;
       ObjectMapper mapper = new ObjectMapper();
       DeltaSharingProfileAdaptor profileAdaptor =
-          mapper.readValue(configuration, DeltaSharingProfileAdaptor.class);
+          mapper.readValue(conf, DeltaSharingProfileAdaptor.class);
       profile = profileAdaptor.toProfile();
     } catch (Exception e) {
       System.out.print(e);

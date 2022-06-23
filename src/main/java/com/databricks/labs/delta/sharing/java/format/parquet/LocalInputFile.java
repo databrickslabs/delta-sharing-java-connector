@@ -12,10 +12,11 @@ import org.apache.parquet.io.SeekableInputStream;
 /**
  * Parquet InputFile with a local java.nio.Path. Adapted from https://github.com/benwatson528/intellij-avro-parquet-plugin/blob/master/src/main/java/uk/co/hadoopathome/intellij/viewer/fileformat/LocalInputFile.java This
  * class is required to instantiate {@link org.apache.parquet.avro.AvroParquetReader} instances.
+ *
  * @implNote  https://github.com/benwatson528/intellij-avro-parquet-plugin is licenced under Apache 2.0.
  */
 public class LocalInputFile implements InputFile {
-  /** Local file object. */
+
   private final RandomAccessFile input;
 
   /**

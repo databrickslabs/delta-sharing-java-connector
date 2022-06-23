@@ -13,50 +13,68 @@ import scala.Option;
  * @since 0.1.0
  */
 public class DeltaSharingProfileAdaptor {
-  int shareCredentialsVersion;
-  String endpoint;
-  String bearerToken;
-  String expirationTime;
+  private int shareCredentialsVersion;
+  private String endpoint;
+  private String bearerToken;
+  private String expirationTime;
 
-  /** Default constructor. */
+  /**
+   * Default constructor.
+   */
   public DeltaSharingProfileAdaptor() {}
 
-  /** Getter for shareCredentialsVersion. */
+  /**
+   * Getter for shareCredentialsVersion.
+   */
   public int getShareCredentialsVersion() {
     return shareCredentialsVersion;
   }
 
-  /** Setter for shareCredentialsVersion. */
+  /**
+   * Setter for shareCredentialsVersion.
+   */
   public void setShareCredentialsVersion(int shareCredentialsVersion) {
     this.shareCredentialsVersion = shareCredentialsVersion;
   }
 
-  /** Getter for endpoint. */
+  /**
+   * Getter for endpoint.
+   */
   public String getEndpoint() {
     return endpoint;
   }
 
-  /** Setter for endpoint. */
+  /**
+   * Setter for endpoint.
+   */
   public void setEndpoint(String endpoint) {
     this.endpoint = endpoint;
   }
 
-  /** Getter for bearerToken. */
+  /**
+   * Getter for bearerToken.
+   */
   public String getBearerToken() {
     return bearerToken;
   }
 
-  /** Setter for bearerToken. */
+  /**
+   * Setter for bearerToken.
+   */
   public void setBearerToken(String bearerToken) {
     this.bearerToken = bearerToken;
   }
 
-  /** Getter for expirationTime. */
+  /**
+   * Getter for expirationTime.
+   */
   public String getExpirationTime() {
     return expirationTime;
   }
 
-  /** Setter for expirationTime. */
+  /**
+   * Setter for expirationTime.
+   */
   public void setExpirationTime(String expirationTime) {
     this.expirationTime = expirationTime;
   }
