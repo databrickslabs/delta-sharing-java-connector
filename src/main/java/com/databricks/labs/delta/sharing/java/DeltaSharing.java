@@ -10,6 +10,15 @@ import io.delta.sharing.spark.model.AddFile;
 import io.delta.sharing.spark.model.DeltaTableFiles;
 import io.delta.sharing.spark.model.DeltaTableMetadata;
 import io.delta.sharing.spark.model.Table;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import scala.Option$;
+import scala.Some$;
+import scala.collection.JavaConverters;
+import scala.collection.Seq;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,14 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.commons.io.IOUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
-import scala.Option$;
-import scala.Some$;
-import scala.collection.JavaConverters;
-import scala.collection.Seq;
 
 /**
  * A wrapper class for {@link io.delta.sharing.spark.DeltaSharingRestClient}
@@ -78,12 +79,12 @@ public class DeltaSharing {
    * Constructor.
    *
    * @param profileProvider An instance of {@link DeltaSharingProfileProvider}.
-   * @param checkpointPath An path to a temporary checkpoint location.
+   * @param checkpointPath  An path to a temporary checkpoint location.
    * @throws IOException Transitive due to the call to
-   *         {@link Files#createTempDirectory(String, FileAttribute[])}.
+   *                     {@link Files#createTempDirectory(String, FileAttribute[])}.
    */
   public DeltaSharing(final DeltaSharingProfileProvider profileProvider,
-      final Path checkpointPath) throws IOException {
+                      final Path checkpointPath) throws IOException {
 
     if (!Files.exists(checkpointPath)) {
       Files.createDirectory(checkpointPath);
@@ -102,15 +103,15 @@ public class DeltaSharing {
   /**
    * Constructor.
    *
-   * @param providerConf A valid JSON document corresponding to
-   *        {@link DeltaSharingProfileProvider}.
+   * @param providerConf       A valid JSON document corresponding to
+   *                           {@link DeltaSharingProfileProvider}.
    * @param checkpointLocation A string containing a path to be used as a
-   *        checkpoint location.
+   *                           checkpoint location.
    * @throws IOException Transitive due to the call to
-   *         {@link Files#createDirectories(Path, FileAttribute[])}.
+   *                     {@link Files#createDirectories(Path, FileAttribute[])}.
    */
   public DeltaSharing(final String providerConf,
-      final String checkpointLocation) throws IOException {
+                      final String checkpointLocation) throws IOException {
     this(new DeltaSharingJsonProvider(providerConf),
         Paths.get(checkpointLocation));
   }
@@ -122,7 +123,7 @@ public class DeltaSharing {
    *
    * @return A list of all tables.
    * @implNote Suppress unnecessary local variable is done to remove warnings
-   *           for a decoupled Scala to Java conversion call and a return call.
+   * for a decoupled Scala to Java conversion call and a return call.
    */
   @SuppressWarnings("UnnecessaryLocalVariable")
   public List<Table> listAllTables() {
@@ -156,11 +157,11 @@ public class DeltaSharing {
    *
    * @return A list of files corresponding to a table.
    * @implNote Suppress unnecessary local variable is done to remove warnings
-   *           for a decoupled Scala to Java conversion call and a return call.
+   * for a decoupled Scala to Java conversion call and a return call.
    */
   @SuppressWarnings("UnnecessaryLocalVariable")
   public List<AddFile> getFiles(Table table, List<String> predicates,
-      Integer limit) {
+                                Integer limit) {
     Seq<String> predicatesSeq = JavaConverters
         .asScalaIteratorConverter(predicates.iterator()).asScala().toSeq();
     DeltaTableFiles deltaTableFiles;
@@ -181,7 +182,7 @@ public class DeltaSharing {
    *
    * @return A list of files corresponding to a table.
    * @implNote Suppress unnecessary local variable is done to remove warnings
-   *           for a decoupled Scala to Java conversion call and a return call.
+   * for a decoupled Scala to Java conversion call and a return call.
    */
   public List<AddFile> getFiles(Table table, List<String> predicates) {
     return getFiles(table, predicates, null);
@@ -199,11 +200,11 @@ public class DeltaSharing {
     String coords = table.share() + "." + table.schema() + "." + table.name();
     Matcher matcher = pattern.matcher(coords);
     boolean matchFound = matcher.find();
-    if (matchFound) {
-      return coords;
-    } else {
+    if (!matchFound) {
       throw new IllegalArgumentException("Invalid format for coordinates");
     }
+
+    return coords;
   }
 
   /**
@@ -218,13 +219,13 @@ public class DeltaSharing {
     Pattern pattern = Pattern.compile("[a-zA-Z0-9]*", Pattern.CASE_INSENSITIVE);
     Matcher matcher = pattern.matcher(fileId);
     boolean matchFound = matcher.find();
-    if (matchFound) {
-      String path = String.format("%s/%s.parquet", this.tempDir, file.id());
-      return Paths.get(path);
-    } else {
+    if (!matchFound) {
       throw new IllegalArgumentException(
           "Invalid format for file id. The id contains special characters.");
     }
+
+    String path = String.format("%s/%s.parquet", this.tempDir, file.id());
+    return Paths.get(path);
   }
 
   /**
@@ -234,7 +235,7 @@ public class DeltaSharing {
    * @param files Files for which we are generating the checkpoint file copies.
    * @return A fully qualified path for a checkpoint file copy.
    * @throws IOException Transitive exception due to the call to
-   *         {@link Files#write(Path, byte[], OpenOption...)}.
+   *                     {@link Files#write(Path, byte[], OpenOption...)}.
    */
   private List<Path> writeCheckpointFiles(List<AddFile> files)
       throws IOException, URISyntaxException {
@@ -274,9 +275,9 @@ public class DeltaSharing {
    *
    * @param table Table whose reader is requested.
    * @return An instance of {@link TableReader} that will manage the reads from
-   *         the table.
+   * the table.
    * @throws IOException Transitive due to the call to
-   *         {@link TableReader#TableReader(List)}.
+   *                     {@link TableReader#TableReader(List)}.
    */
   @SuppressWarnings("UnnecessaryLocalVariable")
   public TableReader<GenericRecord> getTableReader(Table table)
@@ -286,8 +287,27 @@ public class DeltaSharing {
       fs.setConf(new Configuration());
     }
     String uniqueRef = getCoordinates(table);
-    List<Path> paths;
     DeltaTableMetadata newMetadata = this.getMetadata(table);
+
+    List<Path> paths = getPaths(uniqueRef, files, newMetadata);
+
+    TableReader<GenericRecord> tableReader = new TableReader<>(paths);
+    return tableReader;
+  }
+
+  /**
+   * Fetches the list of file pats from the checkpoint location.
+   * Files whose metadata has drifted are updated.
+   *
+   * @param uniqueRef   Reference via table coordinates.
+   * @param files       A list of add files for the table.
+   * @param newMetadata A new value of the metadata for the table.
+   * @return A list of paths to checkpoint files.
+   * @throws IOException        Read/Write errors can occur if temp directory has been altered outside the JVM.
+   * @throws URISyntaxException URI exception can be thrown by writeCheckpointFiles method call.
+   */
+  private List<Path> getPaths(String uniqueRef, List<AddFile> files, DeltaTableMetadata newMetadata) throws IOException, URISyntaxException {
+    List<Path> paths;
     if (this.metadataMap.containsKey(uniqueRef)) {
       DeltaTableMetadata metadata = this.metadataMap.get(uniqueRef);
       if (!newMetadata.equals(metadata)) {
@@ -300,9 +320,7 @@ public class DeltaSharing {
       paths = writeCheckpointFiles(files);
       this.metadataMap.put(uniqueRef, newMetadata);
     }
-
-    TableReader<GenericRecord> tableReader = new TableReader<>(paths);
-    return tableReader;
+    return paths;
   }
 
   /**
@@ -312,7 +330,7 @@ public class DeltaSharing {
    * @param table An instance of {@link Table} whose records we are reading.
    * @return A list of records from the table instance.
    * @throws IOException Transitive due to the call to
-   *         {@link TableReader#read()}
+   *                     {@link TableReader#read()}
    */
   public List<GenericRecord> getAllRecords(Table table)
       throws IOException, URISyntaxException {
@@ -333,12 +351,12 @@ public class DeltaSharing {
    * {@link DeltaSharing#getTableReader(Table)} to access the reader and then
    * use {@link TableReader#readN(Integer)} to read blocks of records.
    *
-   * @param table An instance of {@link Table} whose records we are reading.
+   * @param table  An instance of {@link Table} whose records we are reading.
    * @param numRec Number of records to be read at most.
    * @return A list of records from the table instance. If less records are
-   *         available, only the available records will be returned.
+   * available, only the available records will be returned.
    * @throws IOException Transitive due to the call to
-   *         {@link TableReader#read()}
+   *                     {@link TableReader#read()}
    */
   public List<GenericRecord> getNumRecords(Table table, int numRec)
       throws IOException, URISyntaxException {

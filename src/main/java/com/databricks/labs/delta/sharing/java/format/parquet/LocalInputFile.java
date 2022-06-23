@@ -1,21 +1,23 @@
 package com.databricks.labs.delta.sharing.java.format.parquet;
 
+import org.apache.parquet.io.InputFile;
+import org.apache.parquet.io.SeekableInputStream;
+
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
-import org.apache.parquet.io.InputFile;
-import org.apache.parquet.io.SeekableInputStream;
 
 /**
  * Parquet InputFile with a local java.nio.Path. Adapted from https://github.com/benwatson528/intellij-avro-parquet-plugin/blob/master/src/main/java/uk/co/hadoopathome/intellij/viewer/fileformat/LocalInputFile.java This
  * class is required to instantiate {@link org.apache.parquet.avro.AvroParquetReader} instances.
- * @implNote  https://github.com/benwatson528/intellij-avro-parquet-plugin is licenced under Apache 2.0.
+ *
+ * @implNote https://github.com/benwatson528/intellij-avro-parquet-plugin is licenced under Apache 2.0.
  */
 public class LocalInputFile implements InputFile {
-  /** Local file object. */
+
   private final RandomAccessFile input;
 
   /**
@@ -161,7 +163,7 @@ public class LocalInputFile implements InputFile {
   }
 
   private static void readFullyDirectBuffer(ByteBuffer byteBuffer, byte[] page,
-      ByteBufferReader reader) throws IOException {
+                                            ByteBufferReader reader) throws IOException {
     int nextReadLength = Math.min(byteBuffer.remaining(), page.length);
     int bytesRead = 0;
 
