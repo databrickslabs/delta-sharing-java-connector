@@ -14,7 +14,7 @@ import io.delta.sharing.spark.DeltaSharingProfileProvider;
  * <p/>
  *
  * @see DeltaSharingProfileAdaptor DeltaSharingProfileAdaptor used for object
- *      mapping when parsing JSON.
+ * mapping when parsing JSON.
  * @since 0.1.0
  */
 public class DeltaSharingJsonProvider implements DeltaSharingProfileProvider {

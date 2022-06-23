@@ -8,8 +8,8 @@ import scala.Option;
  * Update when the format of profile file changes.
  *
  * @implNote Suppress is added because of all the getters and setters are required to be explicitly
- *           created for Jackson to parse JSONs correctly. However warnings are shown since getters
- *           and setters are not explicitly tests.
+ * created for Jackson to parse JSONs correctly. However warnings are shown since getters
+ * and setters are not explicitly tests.
  * @since 0.1.0
  */
 public class DeltaSharingProfileAdaptor {
@@ -21,7 +21,8 @@ public class DeltaSharingProfileAdaptor {
   /**
    * Default constructor.
    */
-  public DeltaSharingProfileAdaptor() {}
+  public DeltaSharingProfileAdaptor() {
+  }
 
   /**
    * Getter for shareCredentialsVersion.
@@ -84,7 +85,7 @@ public class DeltaSharingProfileAdaptor {
    * from cross language APIs.
    *
    * @return An equivalent instance of Scala {@link DeltaSharingProfile}
-   *         class.
+   * class.
    */
   public DeltaSharingProfile toProfile() {
     return DeltaSharingProfile.apply(Option.apply(shareCredentialsVersion), endpoint, bearerToken,
