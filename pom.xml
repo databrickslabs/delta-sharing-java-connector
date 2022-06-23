@@ -4,9 +4,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.delta.sharing.java</groupId>
-    <artifactId>DeltaSharingJavaConnector</artifactId>
+    <groupId>com.databricks.labs</groupId>
+    <artifactId>delta-sharing-java-connector</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+
+    <developers>
+        <developer>
+            <id>milos-colic</id>
+            <name>Milos Colic</name>
+            <email>milos.colic@databricks.com</email>
+            <organization>Databricks</organization>
+            <roles>
+                <role>Solutions Architect</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>vuong-nguyen</id>
+            <name>Vuong Nguyen</name>
+            <email>vuong.nguyen@databricks.com</email>
+            <organization>Databricks</organization>
+            <roles>
+                <role>Solutions Architect</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,6 +44,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.12.3</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.parquet</groupId>
@@ -33,11 +55,13 @@
             <groupId>org.apache.parquet</groupId>
             <artifactId>parquet-hadoop</artifactId>
             <version>1.12.3</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-core</artifactId>
             <version>1.2.1</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>commons-httpclient</groupId>
@@ -49,6 +73,7 @@
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
@@ -60,21 +85,25 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.12</artifactId>
             <version>3.2.1</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>

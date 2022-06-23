@@ -13,7 +13,6 @@ import io.delta.sharing.spark.DeltaSharingProfileProvider;
  * creation will fail in case of breaking the constraints.
  * <p/>
  *
- * @author Milos Colic
  * @see DeltaSharingProfileAdaptor DeltaSharingProfileAdaptor used for object
  *      mapping when parsing JSON.
  * @since 0.1.0

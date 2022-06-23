@@ -10,7 +10,6 @@ import scala.Option;
  * @implNote Suppress is added because of all the getters and setters are required to be explicitly
  *           created for Jackson to parse JSONs correctly. However warnings are shown since getters
  *           and setters are not explicitly tests.
- * @author Milos Colic
  * @since 0.1.0
  */
 public class DeltaSharingProfileAdaptor {

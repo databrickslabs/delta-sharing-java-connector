@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileAttribute;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,15 +44,14 @@ import scala.collection.Seq;
  * available local copy in the temp directory.
  * <p/>
  *
- * @author Milos Colic
  * @since 0.1.0
  */
 public class DeltaSharing {
-  private DeltaSharingProfileProvider profileProvider;
-  private DeltaSharingRestClient httpClient;
-  private Path checkpointPath;
-  private Path tempDir;
-  private Map<String, DeltaTableMetadata> metadataMap;
+  private final DeltaSharingProfileProvider profileProvider;
+  private final DeltaSharingRestClient httpClient;
+  private final Path checkpointPath;
+  private final Path tempDir;
+  private final Map<String, DeltaTableMetadata> metadataMap;
 
   /**
    * Getter for {@link DeltaSharing#profileProvider}.
