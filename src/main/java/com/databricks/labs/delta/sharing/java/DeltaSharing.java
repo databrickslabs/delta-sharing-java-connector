@@ -71,7 +71,7 @@ public class DeltaSharing {
    * Getter for checkpointPath.
    */
   public Path getCheckpointPath() {
-    return this.checkpointPath;
+    return checkpointPath;
   }
 
   /**
@@ -82,8 +82,8 @@ public class DeltaSharing {
    * @throws IOException Transitive due to the call to
    *         {@link Files#createTempDirectory(String, FileAttribute[])}.
    */
-  public DeltaSharing(DeltaSharingProfileProvider profileProvider,
-      Path checkpointPath) throws IOException {
+  public DeltaSharing(final DeltaSharingProfileProvider profileProvider,
+      final Path checkpointPath) throws IOException {
 
     if (!Files.exists(checkpointPath)) {
       Files.createDirectory(checkpointPath);
@@ -109,8 +109,8 @@ public class DeltaSharing {
    * @throws IOException Transitive due to the call to
    *         {@link Files#createDirectories(Path, FileAttribute[])}.
    */
-  public DeltaSharing(String providerConf, String checkpointLocation)
-      throws IOException {
+  public DeltaSharing(final String providerConf,
+      final String checkpointLocation) throws IOException {
     this(new DeltaSharingJsonProvider(providerConf),
         Paths.get(checkpointLocation));
   }
