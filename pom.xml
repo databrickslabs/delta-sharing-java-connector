@@ -8,6 +8,27 @@
     <artifactId>delta-sharing-java-connector</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
+    <developers>
+        <developer>
+            <id>milos-colic</id>
+            <name>Milos Colic</name>
+            <email>milos.colic@databricks.com</email>
+            <organization>Databricks</organization>
+            <roles>
+                <role>Solutions Architect</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>vuong-nguyen</id>
+            <name>Vuong Nguyen</name>
+            <email>vuong.nguyen@databricks.com</email>
+            <organization>Databricks</organization>
+            <roles>
+                <role>Solutions Architect</role>
+            </roles>
+        </developer>
+    </developers>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
