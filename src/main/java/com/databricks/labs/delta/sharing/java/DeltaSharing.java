@@ -1,5 +1,6 @@
 package com.databricks.labs.delta.sharing.java;
 
+import com.databricks.labs.delta.sharing.java.adaptor.DeltaSharingJsonProvider;
 import com.databricks.labs.delta.sharing.java.format.parquet.TableReader;
 import io.delta.sharing.spark.DeltaSharingFileSystem;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -73,20 +75,46 @@ public class DeltaSharing {
   }
 
   /**
-   * Default constructor Construction of instances is delegated to a factory.
+   * Constructor.
    *
-   * @see DeltaSharingFactory
+   * @param profileProvider An instance of {@link DeltaSharingProfileProvider}.
+   * @param checkpointPath An path to a temporary checkpoint location.
+   * @throws IOException Transitive due to the call to
+   *         {@link Files#createTempDirectory(String, FileAttribute[])}.
    */
+  public DeltaSharing(DeltaSharingProfileProvider profileProvider,
+      Path checkpointPath) throws IOException {
 
-  public DeltaSharing(final DeltaSharingProfileProvider profileProvider,
-      final DeltaSharingRestClient httpClient, final Path checkpointPath,
-      final Path tempDir, final Map<String, DeltaTableMetadata> metadataMap) {
+    if (!Files.exists(checkpointPath)) {
+      Files.createDirectory(checkpointPath);
+    }
+    Path tempDir = Files.createTempDirectory(checkpointPath, "delta_sharing");
+    tempDir.toFile().deleteOnExit();
+
     this.profileProvider = profileProvider;
-    this.httpClient = httpClient;
+    this.httpClient =
+        new DeltaSharingRestClient(profileProvider, 120, 4, false);
     this.checkpointPath = checkpointPath;
     this.tempDir = tempDir;
-    this.metadataMap = metadataMap;
+    this.metadataMap = new HashMap<>();
   }
+
+  /**
+   * Constructor.
+   *
+   * @param providerConf A valid JSON document corresponding to
+   *        {@link DeltaSharingProfileProvider}.
+   * @param checkpointLocation A string containing a path to be used as a
+   *        checkpoint location.
+   * @throws IOException Transitive due to the call to
+   *         {@link Files#createDirectories(Path, FileAttribute[])}.
+   */
+  public DeltaSharing(String providerConf, String checkpointLocation)
+      throws IOException {
+    this(new DeltaSharingJsonProvider(providerConf),
+        Paths.get(checkpointLocation));
+  }
+
 
   /**
    * Adapter method for getting a List of all tables. Scala API returns a
