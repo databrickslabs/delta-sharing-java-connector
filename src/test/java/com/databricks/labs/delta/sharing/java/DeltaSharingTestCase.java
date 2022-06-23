@@ -1,6 +1,7 @@
 package com.databricks.labs.delta.sharing.java;
 
 import com.databricks.labs.delta.sharing.java.adaptor.DeltaSharingJsonProvider;
+import com.databricks.labs.delta.sharing.java.format.parquet.TableReader;
 import com.databricks.labs.delta.sharing.java.mocks.Mocks;
 import io.delta.sharing.spark.DeltaSharingProfileProvider;
 import io.delta.sharing.spark.model.Table;
@@ -10,6 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.avro.generic.GenericRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -75,5 +78,21 @@ public class DeltaSharingTestCase {
     Assertions.assertTrue(sharing.getAllRecords(firstTable).size() > 0);
     Assertions.assertNotNull(sharing.getAllRecords(firstTable));
     Assertions.assertNotNull(sharing.getNumRecords(firstTable, 100));
+  }
+
+  @Test
+  public void testReadMoreThanFileRows() throws IOException, URISyntaxException {
+    DeltaSharing sharing =
+        new DeltaSharing(Mocks.providerJson, "target/testing/");
+    List<Table> tables = sharing.listAllTables();
+    Table firstTable = tables.get(0);
+    TableReader<GenericRecord> reader = sharing.getTableReader(firstTable);
+    GenericRecord current = reader.read();
+    while (current != null) {
+      current = reader.read();
+    }
+    Assertions.assertNull(reader.read());
+    Assertions.assertEquals(reader.readN(5).size(), 0);
+
   }
 }
