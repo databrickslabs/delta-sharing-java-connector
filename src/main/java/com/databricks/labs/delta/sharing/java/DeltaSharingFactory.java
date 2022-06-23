@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
 import java.util.HashMap;
 
 /**
- * Factory class for {@link DeltaSharing}. It provides different constructors that might be
- * appropriate in different situations.
+ * Factory class for {@link DeltaSharing}. It provides different constructors
+ * that might be appropriate in different situations.
  */
-public class DeltaSharingFactory {
+public final class DeltaSharingFactory {
 
   /**
    * Constructor.
@@ -27,35 +26,37 @@ public class DeltaSharingFactory {
    */
   public static DeltaSharing create(DeltaSharingProfileProvider profileProvider,
       Path checkpointPath) throws IOException {
-    DeltaSharing instance = new DeltaSharing();
-    instance.profileProvider = profileProvider;
-    instance.httpClient = new DeltaSharingRestClient(profileProvider, 120, 4, false);
-    instance.checkpointPath = checkpointPath;
-    instance.metadataMap = new HashMap<>();
+
     if (!Files.exists(checkpointPath)) {
-      Files.createDirectory(instance.checkpointPath);
+      Files.createDirectory(checkpointPath);
     }
-    instance.tempDir = Files.createTempDirectory(instance.checkpointPath, "delta_sharing");
-    instance.tempDir.toFile().deleteOnExit();
+    Path tempDir = Files.createTempDirectory(checkpointPath, "delta_sharing");
+    tempDir.toFile().deleteOnExit();
+    DeltaSharing instance = new DeltaSharing(profileProvider,
+        new DeltaSharingRestClient(profileProvider, 120, 4, false),
+        checkpointPath, tempDir, new HashMap<>());
     return instance;
   }
 
   /**
    * Constructor.
    *
-   * @param providerConf A valid JSON document corresponding to {@link DeltaSharingProfileProvider}.
-   * @param checkpointLocation A string containing a path to be used as a checkpoint location.
+   * @param providerConf A valid JSON document corresponding to
+   *        {@link DeltaSharingProfileProvider}.
+   * @param checkpointLocation A string containing a path to be used as a
+   *        checkpoint location.
    * @return An instance of {@link DeltaSharing} client.
    * @throws IOException Transitive due to the call to
    *         {@link Files#createDirectories(Path, FileAttribute[])}.
    */
-  public static DeltaSharing create(String providerConf, String checkpointLocation)
-      throws IOException {
+  public static DeltaSharing create(String providerConf,
+      String checkpointLocation) throws IOException {
     Path checkpointPath = Paths.get(checkpointLocation);
     if (!Files.exists(checkpointPath)) {
       Files.createDirectories(checkpointPath);
     }
-    DeltaSharingProfileProvider profileProvider = new DeltaSharingJsonProvider(providerConf);
+    DeltaSharingProfileProvider profileProvider =
+        new DeltaSharingJsonProvider(providerConf);
     return create(profileProvider, checkpointPath);
   }
 }
