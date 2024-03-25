@@ -98,10 +98,14 @@ public class TableReader<T> {
    */
   private List<ParquetReader<T>> getReaders() throws IOException {
     List<ParquetReader<T>> readers = new LinkedList<>();
+    Configuration conf = new Configuration();
+
+    conf.set("parquet.avro.readInt96AsFixed", "true");
+
     for (Path path : paths) {
       LocalInputFile localInputFile = new LocalInputFile(path);
       ParquetReader<T> reader =
-          AvroParquetReader.<T>builder(localInputFile).build();
+          AvroParquetReader.<T>builder(localInputFile).withConf(conf).build();
       readers.add(reader);
     }
     return readers;
