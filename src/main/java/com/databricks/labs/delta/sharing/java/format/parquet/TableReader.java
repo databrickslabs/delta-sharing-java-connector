@@ -1,5 +1,6 @@
 package com.databricks.labs.delta.sharing.java.format.parquet;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.avro.AvroParquetReader;
 import org.apache.parquet.hadoop.ParquetReader;
 
